@@ -1,0 +1,32 @@
+services:
+  iwf:
+    image: iworkflowio/iwf-server-lite:latest
+    environment:
+      - AUTO_FIX_WORKER_URL=mycode
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
+    ports:
+      - 8801:8801 
+      - 7233:7233 
+      - 8233:8233
+    volumes: 
+      - ./dc/start-lite-server.sh:/iwf/lite/start-lite-server.sh
+  mycode:
+    build: 
+      dockerfile: ./Dockerfile
+    ports:
+      - 8080:8080 
+      - 8803:8803 
+    expose:
+      - 8803
+    develop:
+      watch: 
+        # sync static content
+        - path: ./
+          action: rebuild
+
+#     networks:
+#       - mainNet
+# networks:
+#   mainNet:
+#     driver: bridge
